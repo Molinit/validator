@@ -1,4 +1,4 @@
-import Validator from './Validator';
+import Validator from '../Validator';
 
 describe('Validator', () => {
   const validator = new Validator();
