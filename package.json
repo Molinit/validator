@@ -1,6 +1,6 @@
 {
   "name": "@molinit/validator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A flexible, type-safe validation library for TypeScript/JavaScript with declarative schema-based validation",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
