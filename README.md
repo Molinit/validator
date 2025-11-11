@@ -1157,4 +1157,4 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
 ---
 
-**Made with ❤️ by the YourOrg team**
+**Made with ❤️ by the Molinit team**
