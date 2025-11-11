@@ -426,6 +426,71 @@ Validates an array of objects, each matching a specific shape.
 
 ---
 
+### `at_least_one_of`
+
+Validates that at least one field from a group has a value. Useful when you have multiple optional fields but require at least one to be filled.
+
+```typescript
+{
+  contact_email: {
+    at_least_one_of: {
+      fields: ['contact_email', 'contact_phone', 'contact_address'],
+    },
+  },
+  contact_phone: {
+    at_least_one_of: {
+      fields: ['contact_email', 'contact_phone', 'contact_address'],
+    },
+  },
+  contact_address: {
+    at_least_one_of: {
+      fields: ['contact_email', 'contact_phone', 'contact_address'],
+    },
+  },
+}
+```
+
+**Features:**
+- **Group validation:** Checks if ANY field in the group has a value
+- **Conditional requirement:** Optional `required_depends_on` for conditional validation
+- **Flexible:** Works with strings, numbers, booleans, and arrays
+- **Empty detection:** Treats `''`, `null`, `undefined`, and `[]` as empty
+
+**Example:**
+```typescript
+// Invalid: None of the contact fields have values
+{
+  contact_email: '',
+  contact_phone: '',
+  contact_address: '',
+}
+// Error on all three fields: "At least one must be selected"
+
+// Valid: At least one contact method provided
+{
+  contact_email: 'user@example.com',
+  contact_phone: '',
+  contact_address: '',
+}
+```
+
+**With Conditional Requirement:**
+```typescript
+{
+  social_facebook: {
+    at_least_one_of: {
+      fields: ['social_facebook', 'social_twitter', 'social_instagram'],
+      required_depends_on: { key: 'has_social', value: 'yes' },
+    },
+  },
+  // Same config for social_twitter and social_instagram
+}
+```
+
+When `has_social = 'yes'`, at least one social media field must have a value.
+
+---
+
 ## Advanced Usage
 
 ### Conditional Validation
@@ -628,6 +693,7 @@ const error2 = validator.validate_regexp(
 - `validate_array_items(field, value, options, input)`
 - `validate_shapeOf(field, value, options, input)`
 - `validate_arrayOfShapes(field, value, options, input)`
+- `validate_at_least_one_of(field, value, options, input)`
 
 ---
 

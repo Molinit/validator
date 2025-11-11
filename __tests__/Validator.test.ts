@@ -783,4 +783,362 @@ describe('Validator', () => {
       });
     });
   });
+
+  describe('validate_at_least_one_of', () => {
+    describe('basic validation', () => {
+      it('should return error when none of the fields have a value', () => {
+        const input = {
+          field1: '',
+          field2: null,
+          field3: undefined,
+          field4: [],
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3', 'field4'],
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          '',
+          options,
+          input,
+        );
+        expect(result).toEqual({
+          field: 'field1',
+          message: 'At least one must be selected',
+        });
+      });
+
+      it('should return undefined when at least one field has a string value', () => {
+        const input = {
+          field1: 'value',
+          field2: '',
+          field3: undefined,
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          'value',
+          options,
+          input,
+        );
+        expect(result).toBeUndefined();
+      });
+
+      it('should return undefined when at least one field has a non-empty array', () => {
+        const input = {
+          field1: [],
+          field2: ['item'],
+          field3: undefined,
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          [],
+          options,
+          input,
+        );
+        expect(result).toBeUndefined();
+      });
+
+      it('should return error when all arrays are empty', () => {
+        const input = {
+          field1: [],
+          field2: [],
+          field3: [],
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          [],
+          options,
+          input,
+        );
+        expect(result).toEqual({
+          field: 'field1',
+          message: 'At least one must be selected',
+        });
+      });
+
+      it('should return undefined when any field has a number value', () => {
+        const input = {
+          field1: '',
+          field2: 0,
+          field3: undefined,
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+        };
+        const result = validator.validate_at_least_one_of(
+          'field2',
+          0,
+          options,
+          input,
+        );
+        expect(result).toBeUndefined();
+      });
+    });
+
+    describe('conditional validation with required_depends_on', () => {
+      it('should validate when condition is met and no fields have values', () => {
+        const input = {
+          enable_feature: '1',
+          field1: '',
+          field2: '',
+          field3: '',
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+          required_depends_on: { key: 'enable_feature', value: '1' },
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          '',
+          options,
+          input,
+        );
+        expect(result).toEqual({
+          field: 'field1',
+          message: 'At least one must be selected',
+        });
+      });
+
+      it('should pass when condition is met and at least one field has value', () => {
+        const input = {
+          enable_feature: '1',
+          field1: 'value',
+          field2: '',
+          field3: '',
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+          required_depends_on: { key: 'enable_feature', value: '1' },
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          'value',
+          options,
+          input,
+        );
+        expect(result).toBeUndefined();
+      });
+
+      it('should skip validation when condition is not met', () => {
+        const input = {
+          enable_feature: '0',
+          field1: '',
+          field2: '',
+          field3: '',
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+          required_depends_on: { key: 'enable_feature', value: '1' },
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          '',
+          options,
+          input,
+        );
+        expect(result).toBeUndefined();
+      });
+
+      it('should skip validation when dependent field does not exist', () => {
+        const input = {
+          field1: '',
+          field2: '',
+          field3: '',
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+          required_depends_on: { key: 'enable_feature', value: '1' },
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          '',
+          options,
+          input,
+        );
+        expect(result).toBeUndefined();
+      });
+
+      it('should work with numeric values in condition', () => {
+        const input = {
+          enable_feature: 1,
+          field1: '',
+          field2: '',
+        };
+        const options = {
+          fields: ['field1', 'field2'],
+          required_depends_on: { key: 'enable_feature', value: 1 },
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          '',
+          options,
+          input,
+        );
+        expect(result).toEqual({
+          field: 'field1',
+          message: 'At least one must be selected',
+        });
+      });
+    });
+
+    describe('real-world examples', () => {
+      it('should require at least one contact method', () => {
+        const input = {
+          contact_email: '',
+          contact_phone: '',
+          contact_address: '',
+        };
+        const options = {
+          fields: ['contact_email', 'contact_phone', 'contact_address'],
+        };
+        const result = validator.validate_at_least_one_of(
+          'contact_email',
+          '',
+          options,
+          input,
+        );
+        expect(result).toEqual({
+          field: 'contact_email',
+          message: 'At least one must be selected',
+        });
+      });
+
+      it('should pass when at least one contact method provided', () => {
+        const input = {
+          contact_email: 'user@example.com',
+          contact_phone: '',
+          contact_address: '',
+        };
+        const options = {
+          fields: ['contact_email', 'contact_phone', 'contact_address'],
+        };
+        const result = validator.validate_at_least_one_of(
+          'contact_email',
+          'user@example.com',
+          options,
+          input,
+        );
+        expect(result).toBeUndefined();
+      });
+
+      it('should require at least one social media when enabled', () => {
+        const input = {
+          has_social: 'yes',
+          social_facebook: '',
+          social_twitter: '',
+          social_instagram: '',
+        };
+        const options = {
+          fields: ['social_facebook', 'social_twitter', 'social_instagram'],
+          required_depends_on: { key: 'has_social', value: 'yes' },
+        };
+        const result = validator.validate_at_least_one_of(
+          'social_facebook',
+          '',
+          options,
+          input,
+        );
+        expect(result).toEqual({
+          field: 'social_facebook',
+          message: 'At least one must be selected',
+        });
+      });
+
+      it('should not require social media when disabled', () => {
+        const input = {
+          has_social: 'no',
+          social_facebook: '',
+          social_twitter: '',
+          social_instagram: '',
+        };
+        const options = {
+          fields: ['social_facebook', 'social_twitter', 'social_instagram'],
+          required_depends_on: { key: 'has_social', value: 'yes' },
+        };
+        const result = validator.validate_at_least_one_of(
+          'social_facebook',
+          '',
+          options,
+          input,
+        );
+        expect(result).toBeUndefined();
+      });
+    });
+
+    describe('edge cases', () => {
+      it('should return undefined if options is undefined', () => {
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          '',
+          undefined,
+          {},
+        );
+        expect(result).toBeUndefined();
+      });
+
+      it('should handle fields not present in input', () => {
+        const input = {
+          field1: '',
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          '',
+          options,
+          input,
+        );
+        expect(result).toEqual({
+          field: 'field1',
+          message: 'At least one must be selected',
+        });
+      });
+
+      it('should treat boolean false as a valid value', () => {
+        const input = {
+          field1: false,
+          field2: '',
+          field3: '',
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          false,
+          options,
+          input,
+        );
+        expect(result).toBeUndefined();
+      });
+
+      it('should treat number 0 as a valid value', () => {
+        const input = {
+          field1: 0,
+          field2: '',
+          field3: '',
+        };
+        const options = {
+          fields: ['field1', 'field2', 'field3'],
+        };
+        const result = validator.validate_at_least_one_of(
+          'field1',
+          0,
+          options,
+          input,
+        );
+        expect(result).toBeUndefined();
+      });
+    });
+  });
 });

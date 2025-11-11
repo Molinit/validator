@@ -567,6 +567,67 @@ class Validator {
 
     return undefined;
   };
+
+  /**
+   *   Validates that at least one field from a group has a value
+   *   Used for cases where you have multiple optional fields, but at least one must be filled
+   *
+   *   Example use case: Multiple contact methods where user must provide at least one
+   *
+   */
+  validate_at_least_one_of = (
+    field: string,
+    value: unknown,
+    options: AttributeValueType<'at_least_one_of'>,
+    input: ValidationInput,
+  ): ValidationError | undefined => {
+    if (!options) return undefined;
+
+    const { fields, required_depends_on } = options;
+
+    // If conditional requirement exists, check if condition is met
+    if (required_depends_on) {
+      const dependentValue = input[required_depends_on.key];
+      if (dependentValue !== required_depends_on.value) {
+        // Condition not met, validation not required
+        return undefined;
+      }
+    }
+
+    // Check if at least one of the fields has a value
+    let hasAtLeastOne = false;
+    for (const fieldName of fields) {
+      const fieldValue = input[fieldName];
+
+      // Check if field has a meaningful value
+      if (
+        fieldValue !== undefined &&
+        fieldValue !== null &&
+        fieldValue !== ''
+      ) {
+        // For arrays, check if not empty
+        if (Array.isArray(fieldValue)) {
+          if (fieldValue.length > 0) {
+            hasAtLeastOne = true;
+            break;
+          }
+        } else {
+          hasAtLeastOne = true;
+          break;
+        }
+      }
+    }
+
+    // If none of the fields have a value, return error
+    if (!hasAtLeastOne) {
+      return {
+        field,
+        message: 'At least one must be selected',
+      };
+    }
+
+    return undefined;
+  };
 }
 
 export default Validator;

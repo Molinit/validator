@@ -42,6 +42,10 @@ export type ValidationAttributes = {
   array_items?: unknown[]; // Validates each array item is in this list
   shapeOf?: ShapeOfValidation; // Validates object shape with custom validators
   arrayOfShapes?: ArrayOfShapesValidation; // Validates array of objects with shape validation
+  at_least_one_of?: {
+    fields: string[]; // List of field names in the group
+    required_depends_on?: { key: string; value: string | number }; // Optional conditional requirement
+  };
 };
 
 export type AttributeValueType<T extends keyof ValidationAttributes> =

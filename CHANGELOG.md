@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- `validate_at_least_one_of` - Group validation requiring at least one field to have a value
+  - Validates that at least one field from a group has a meaningful value
+  - Supports conditional requirements via `required_depends_on`
+  - Works with strings, numbers, booleans, and arrays
+  - Returns error on all fields in the group when none have values
+- 18 comprehensive tests for `at_least_one_of` validator
+- Documentation for `at_least_one_of` in README.md and QUICK_REFERENCE.md
+
 ## [1.0.0] - 2025-11-11
 
 ### Added

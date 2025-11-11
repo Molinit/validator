@@ -40,6 +40,7 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
 | `array_items` | Array items must be in allowed list | `array_items: ['option1', 'option2']` |
 | `shapeOf` | Validate object structure | `shapeOf: { shape: {...}, required: [...] }` |
 | `arrayOfShapes` | Validate array of objects | `arrayOfShapes: { shape: {...}, validators: {...} }` |
+| `at_least_one_of` | At least one field from group must have value | `at_least_one_of: { fields: [...] }` |
 
 ---
 
@@ -182,6 +183,48 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
 
 ---
 
+### at_least_one_of
+```typescript
+{
+  contact_email: {
+    at_least_one_of: {
+      fields: ['contact_email', 'contact_phone', 'contact_address'],
+    },
+  },
+  contact_phone: {
+    at_least_one_of: {
+      fields: ['contact_email', 'contact_phone', 'contact_address'],
+    },
+  },
+  contact_address: {
+    at_least_one_of: {
+      fields: ['contact_email', 'contact_phone', 'contact_address'],
+    },
+  },
+}
+```
+
+**Features:**
+- Group validation (any field must have value)
+- Conditional requirement (`required_depends_on`)
+- Works with strings, numbers, booleans, arrays
+- Empty detection (`''`, `null`, `undefined`, `[]`)
+
+**With condition:**
+```typescript
+{
+  social_facebook: {
+    at_least_one_of: {
+      fields: ['social_facebook', 'social_twitter', 'social_instagram'],
+      required_depends_on: { key: 'has_social', value: 'yes' },
+    },
+  },
+  // Same for other social fields
+}
+```
+
+---
+
 ## Type Reference
 
 ```typescript
@@ -203,6 +246,10 @@ type ValidationAttributes = {
   array_items?: unknown[];
   shapeOf?: ShapeOfValidation;
   arrayOfShapes?: ArrayOfShapesValidation;
+  at_least_one_of?: {
+    fields: string[];
+    required_depends_on?: { key: string; value: string | number };
+  };
 };
 
 // Shape validation
