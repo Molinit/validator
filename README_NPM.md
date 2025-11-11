@@ -13,7 +13,7 @@ A flexible, type-safe validation library for TypeScript/JavaScript with declarat
 ✅ **Extensible** - Add custom validation functions  
 ✅ **Conditional validation** - Fields required based on other fields  
 ✅ **Complex structures** - Validate objects, arrays, and nested data  
-✅ **Zero dependencies** - Lightweight and fast  
+✅ **Zero dependencies** - Lightweight and fast
 
 ## Quick Start
 
@@ -30,7 +30,10 @@ const schema = {
   role: { oneof: ['admin', 'user', 'guest'] },
 };
 
-const errors = validate({ email: 'user@example.com', age: '25', role: 'user' }, schema);
+const errors = validate(
+  { email: 'user@example.com', age: '25', role: 'user' },
+  schema,
+);
 // errors = [] (valid!)
 ```
 
@@ -130,4 +133,3 @@ MIT © Molinit
 - 🐛 [Report Issues](https://github.com/molinit/validator/issues)
 - 💬 [Discussions](https://github.com/molinit/validator/discussions)
 - 📧 Email: contact@molinit.com
-

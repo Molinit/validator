@@ -15,13 +15,6 @@
     "moduleResolution": "node",
     "types": ["vitest/globals", "node"]
   },
-  "include": [
-    "*.ts",
-    "__tests__/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["*.ts", "__tests__/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
-

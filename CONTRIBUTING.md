@@ -46,7 +46,7 @@ By participating in this project, you agree to maintain a respectful, inclusive,
 
 ### Prerequisites
 
-- Node.js 16+ 
+- Node.js 16+
 - npm or yarn
 - TypeScript knowledge
 
@@ -78,6 +78,18 @@ npm run type-check
 
 ```bash
 npm run lint
+```
+
+### Format Code with Prettier
+
+```bash
+npm run prettier
+```
+
+### Format and Lint (Combined)
+
+```bash
+npm run format
 ```
 
 ---
@@ -112,23 +124,32 @@ validate/
 ### Workflow
 
 1. **Create a branch:**
+
    ```bash
    git checkout -b feature/my-new-feature
    ```
 
 2. **Make your changes**
 
-3. **Commit with clear messages:**
+3. **Format and lint your code:**
+
+   ```bash
+   npm run format
+   ```
+
+4. **Commit with clear messages:**
+
    ```bash
    git commit -m "Add: New validation rule for email domains"
    ```
 
-4. **Push to your fork:**
+5. **Push to your fork:**
+
    ```bash
    git push origin feature/my-new-feature
    ```
 
-5. **Create a Pull Request** on GitHub
+6. **Create a Pull Request** on GitHub
 
 ---
 
@@ -147,7 +168,7 @@ describe('validate_myNewRule', () => {
       'field',
       'valid-value',
       options,
-      {}
+      {},
     );
     expect(result).toBeUndefined();
   });
@@ -157,7 +178,7 @@ describe('validate_myNewRule', () => {
       'field',
       'invalid-value',
       options,
-      {}
+      {},
     );
     expect(result).toEqual({
       field: 'field',
@@ -216,18 +237,23 @@ npm test -- --watch
 
 ### Code Style
 
+**We use Prettier for automatic code formatting. Run `npm run format` before committing.**
+
 - Use 2 spaces for indentation
 - Use single quotes for strings
 - Add semicolons
-- Max line length: 100 characters
+- Max line length: 80 characters (enforced by Prettier)
+- Trailing commas in multi-line structures
 - Add JSDoc comments for public methods
+
+**Note:** Most style issues are automatically fixed by Prettier. Focus on writing clear, readable code.
 
 ### Example
 
 ```typescript
 /**
  * Validates that a field matches a specific pattern
- * 
+ *
  * @param field - The field name being validated
  * @param value - The value to validate
  * @param options - The regex pattern to match
@@ -253,6 +279,7 @@ validate_myRule = (
 Before submitting a PR, ensure:
 
 - [ ] Code follows style guidelines
+- [ ] Code is formatted (`npm run format`)
 - [ ] All tests pass (`npm test`)
 - [ ] New tests added for new features
 - [ ] Types are correct (`npm run type-check`)
@@ -265,18 +292,22 @@ Before submitting a PR, ensure:
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 Describe testing performed
 
 ## Checklist
+
 - [ ] Tests pass
 - [ ] Documentation updated
 - [ ] Types correct
@@ -317,7 +348,7 @@ validate_myNewRule = (
 // In types.ts
 export type ValidationAttributes = {
   // ...existing attributes
-  myNewRule?: MyNewRuleOptions;  // Add your rule
+  myNewRule?: MyNewRuleOptions; // Add your rule
 };
 
 export type MyNewRuleOptions = {
@@ -340,7 +371,7 @@ describe('validate_myNewRule', () => {
 
 ### Step 4: Update Documentation
 
-```typescript
+````typescript
 // In README.md
 ### `myNewRule`
 
@@ -352,13 +383,15 @@ Description of the rule.
     myNewRule: options,
   }
 }
-```
+````
 
 **Example:**
+
 ```typescript
 // Show usage example
 ```
-```
+
+````
 
 ### Step 5: Update Quick Reference
 
@@ -395,19 +428,19 @@ Add entry to `QUICK_REFERENCE.md` with:
 ```typescript
 /**
  * Brief description of method
- * 
+ *
  * @param field - Description
  * @param value - Description
  * @param options - Description
  * @param input - Description
  * @returns Description
- * 
+ *
  * @example
  * ```typescript
  * const result = validator.validate_method('email', 'test@example.com', options, {});
  * ```
  */
-```
+````
 
 ---
 
@@ -456,7 +489,17 @@ npm run build
 
 ```bash
 # Auto-fix linting issues
-npm run lint -- --fix
+npm run lint:fix
+```
+
+### Formatting Issues
+
+```bash
+# Format all files
+npm run prettier
+
+# Format and lint together
+npm run format
 ```
 
 ---
@@ -472,6 +515,7 @@ npm run lint -- --fix
 ## Recognition
 
 Contributors will be:
+
 - Listed in `CONTRIBUTORS.md`
 - Mentioned in release notes
 - Credited in documentation
@@ -485,4 +529,3 @@ By contributing, you agree that your contributions will be licensed under the MI
 ---
 
 Thank you for contributing to Validator! 🎉
-

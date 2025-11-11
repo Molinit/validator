@@ -132,8 +132,8 @@ Validation errors are returned as an array of objects:
 
 ```typescript
 type ValidationError = {
-  field: string;      // The field that failed validation
-  message: string;    // Human-readable error message
+  field: string; // The field that failed validation
+  message: string; // Human-readable error message
 };
 ```
 
@@ -154,6 +154,7 @@ Ensures a field is present and not empty.
 ```
 
 **Validates:**
+
 - Field exists
 - Value is not `undefined`, `null`, or empty string
 - For arrays: at least one item exists (when used with `array: true`)
@@ -173,6 +174,7 @@ Makes a field required only when another field has a specific value.
 ```
 
 **Example:**
+
 ```typescript
 // Valid: change_password is '0', so confirmation not required
 { change_password: '0', password_confirmation: '' }
@@ -197,10 +199,17 @@ Validates the length of a string or the string representation of a value.
 ```
 
 **Example:**
+
 ```typescript
-{ username: 'ab' }        // Invalid: too short
-{ username: 'alice' }     // Valid
-{ username: 'a'.repeat(21) } // Invalid: too long
+{
+  username: 'ab';
+} // Invalid: too short
+{
+  username: 'alice';
+} // Valid
+{
+  username: 'a'.repeat(21);
+} // Invalid: too long
 ```
 
 ---
@@ -221,9 +230,14 @@ Validates a field against a regular expression.
 ```
 
 **Example:**
+
 ```typescript
-{ email: 'user@example.com' }  // Valid
-{ email: 'invalid-email' }     // Invalid
+{
+  email: 'user@example.com';
+} // Valid
+{
+  email: 'invalid-email';
+} // Invalid
 ```
 
 ---
@@ -258,9 +272,14 @@ Validates that a field is one of the allowed values (enum validation).
 ```
 
 **Example:**
+
 ```typescript
-{ status: 'published' }  // Valid
-{ status: 'pending' }    // Invalid
+{
+  status: 'published';
+} // Valid
+{
+  status: 'pending';
+} // Invalid
 ```
 
 ---
@@ -279,10 +298,17 @@ Validates that a field is an array.
 ```
 
 **Example:**
+
 ```typescript
-{ tags: ['javascript', 'typescript'] }  // Valid
-{ tags: [] }                            // Invalid: empty array with required: true
-{ tags: 'string' }                      // Invalid: not an array
+{
+  tags: ['javascript', 'typescript'];
+} // Valid
+{
+  tags: [];
+} // Invalid: empty array with required: true
+{
+  tags: 'string';
+} // Invalid: not an array
 ```
 
 ---
@@ -301,12 +327,18 @@ Validates that all items in an array are from an allowed list.
 ```
 
 **Example:**
+
 ```typescript
-{ tags: ['javascript', 'typescript'] }  // Valid
-{ tags: ['javascript', 'php'] }         // Invalid: 'php' not in allowed list
+{
+  tags: ['javascript', 'typescript'];
+} // Valid
+{
+  tags: ['javascript', 'php'];
+} // Invalid: 'php' not in allowed list
 ```
 
 **Supports:**
+
 - Primitives (strings, numbers, booleans)
 - Objects (deep comparison via JSON)
 
@@ -336,12 +368,14 @@ Validates that a field is an object matching a specific shape with optional cust
 ```
 
 **Features:**
+
 - **Type checking:** Validates each property type
 - **Required properties:** Specify which properties are mandatory
 - **Enum values:** Use array for allowed values
 - **Custom validators:** Add property-specific validation functions
 
 **Example:**
+
 ```typescript
 // Valid
 {
@@ -400,19 +434,21 @@ Validates an array of objects, each matching a specific shape.
 ```
 
 **Features:**
+
 - **Array-level validation:** `_array` validator for the entire array
 - **Property-level validation:** Individual validators for each property
 - **Type checking:** Each object property validated
 - **Required properties:** Per-object required fields
 
 **Example:**
+
 ```typescript
 // Valid
 {
   items: [
     { name: 'Laptop', quantity: 2, price: 999.99, category: 'electronics' },
     { name: 'T-Shirt', quantity: 5, price: 19.99, category: 'clothing' },
-  ]
+  ];
 }
 
 // Invalid: second item has negative price
@@ -420,7 +456,7 @@ Validates an array of objects, each matching a specific shape.
   items: [
     { name: 'Laptop', quantity: 2, price: 999.99, category: 'electronics' },
     { name: 'T-Shirt', quantity: 5, price: -19.99, category: 'clothing' },
-  ]
+  ];
 }
 ```
 
@@ -451,12 +487,14 @@ Validates that at least one field from a group has a value. Useful when you have
 ```
 
 **Features:**
+
 - **Group validation:** Checks if ANY field in the group has a value
 - **Conditional requirement:** Optional `required_depends_on` for conditional validation
 - **Flexible:** Works with strings, numbers, booleans, and arrays
 - **Empty detection:** Treats `''`, `null`, `undefined`, and `[]` as empty
 
 **Example:**
+
 ```typescript
 // Invalid: None of the contact fields have values
 {
@@ -475,6 +513,7 @@ Validates that at least one field from a group has a value. Useful when you have
 ```
 
 **With Conditional Requirement:**
+
 ```typescript
 {
   social_facebook: {
@@ -573,7 +612,8 @@ Create reusable custom validation functions:
 ```typescript
 // Custom validators
 const isValidUUID = (value: unknown): boolean => {
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return uuidRegex.test(value as string);
 };
 
@@ -642,13 +682,16 @@ Validate fields that can be multiple types:
 Validates input data against a schema.
 
 **Parameters:**
+
 - `input: ValidationInput` - The data to validate (object with string keys)
 - `schema: ValidationDescription` - The validation schema
 
 **Returns:**
+
 - `ValidationError[]` - Array of validation errors (empty if valid)
 
 **Example:**
+
 ```typescript
 const errors = validate(userData, userSchema);
 if (errors.length === 0) {
@@ -675,7 +718,7 @@ const error2 = validator.validate_regexp(
   'email',
   'invalid',
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  {}
+  {},
 );
 // Returns: { field: 'email', message: "Field doesn't match the required pattern" }
 ```
@@ -907,19 +950,27 @@ const isValidCreditCard = (value: unknown): boolean => {
 };
 
 // ❌ Bad: Complex regex
-regexp: /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|...)$/
+regexp: /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|...)$/;
 ```
 
 ### 3. Group Related Schemas
 
 ```typescript
 // schemas/user.ts
-export const USER_SCHEMA = { /* ... */ };
-export const USER_PROFILE_SCHEMA = { /* ... */ };
+export const USER_SCHEMA = {
+  /* ... */
+};
+export const USER_PROFILE_SCHEMA = {
+  /* ... */
+};
 
 // schemas/product.ts
-export const PRODUCT_SCHEMA = { /* ... */ };
-export const PRODUCT_VARIANT_SCHEMA = { /* ... */ };
+export const PRODUCT_SCHEMA = {
+  /* ... */
+};
+export const PRODUCT_VARIANT_SCHEMA = {
+  /* ... */
+};
 ```
 
 ### 4. Provide Clear Error Messages
@@ -929,7 +980,7 @@ The validator provides default error messages, but you can wrap it for custom me
 ```typescript
 const errors = validate(data, schema);
 if (errors.length > 0) {
-  const customErrors = errors.map(err => ({
+  const customErrors = errors.map((err) => ({
     ...err,
     message: getCustomMessage(err.field, err.message),
   }));
@@ -1024,14 +1075,17 @@ if (errors.length === 0) {
 }
 
 // Get specific field errors
-const emailErrors = errors.filter(e => e.field === 'email');
+const emailErrors = errors.filter((e) => e.field === 'email');
 
 // Group errors by field
-const errorsByField = errors.reduce((acc, err) => {
-  if (!acc[err.field]) acc[err.field] = [];
-  acc[err.field].push(err.message);
-  return acc;
-}, {} as Record<string, string[]>);
+const errorsByField = errors.reduce(
+  (acc, err) => {
+    if (!acc[err.field]) acc[err.field] = [];
+    acc[err.field].push(err.message);
+    return acc;
+  },
+  {} as Record<string, string[]>,
+);
 ```
 
 ### Custom Error Handling
@@ -1039,8 +1093,8 @@ const errorsByField = errors.reduce((acc, err) => {
 ```typescript
 function validateWithCustomErrors(data: any, schema: ValidationDescription) {
   const errors = validate(data, schema);
-  
-  return errors.map(err => ({
+
+  return errors.map((err) => ({
     field: err.field,
     message: err.message,
     code: getErrorCode(err.message),
@@ -1104,4 +1158,3 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 ---
 
 **Made with ❤️ by the YourOrg team**
-

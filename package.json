@@ -16,8 +16,10 @@
     "test:coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
+    "prettier": "prettier --write \"**/*.{ts,js,json,md}\"",
+    "format": "npm run prettier && npm run lint:fix",
     "type-check": "tsc --noEmit",
-    "prepublishOnly": "npm run build && npm test",
+    "prepublishOnly": "npm run format && npm run build && npm test",
     "prepare": "npm run build"
   },
   "keywords": [
@@ -48,6 +50,9 @@
     "@typescript-eslint/parser": "^6.0.0",
     "@vitest/coverage-v8": "^1.0.0",
     "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
   },
@@ -58,4 +63,3 @@
     "access": "public"
   }
 }
-

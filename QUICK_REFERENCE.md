@@ -27,29 +27,35 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
 
 ## All Validation Rules
 
-| Rule | Purpose | Example |
-|------|---------|---------|
-| `required` | Field must exist and not be empty | `required: true` |
-| `required_depends_on` | Required if another field has specific value | `required_depends_on: { key: 'type', value: 'custom' }` |
-| `minLength` | Minimum string length | `minLength: 5` |
-| `maxLength` | Maximum string length | `maxLength: 100` |
-| `regexp` | Match regular expression | `regexp: /^\d{5}$/` |
-| `equal` | Must equal specific value | `equal: 'yes'` |
-| `oneof` | Must be one of allowed values | `oneof: ['red', 'green', 'blue']` |
-| `array` | Must be an array | `array: true` |
-| `array_items` | Array items must be in allowed list | `array_items: ['option1', 'option2']` |
-| `shapeOf` | Validate object structure | `shapeOf: { shape: {...}, required: [...] }` |
-| `arrayOfShapes` | Validate array of objects | `arrayOfShapes: { shape: {...}, validators: {...} }` |
-| `at_least_one_of` | At least one field from group must have value | `at_least_one_of: { fields: [...] }` |
+| Rule                  | Purpose                                       | Example                                                 |
+| --------------------- | --------------------------------------------- | ------------------------------------------------------- |
+| `required`            | Field must exist and not be empty             | `required: true`                                        |
+| `required_depends_on` | Required if another field has specific value  | `required_depends_on: { key: 'type', value: 'custom' }` |
+| `minLength`           | Minimum string length                         | `minLength: 5`                                          |
+| `maxLength`           | Maximum string length                         | `maxLength: 100`                                        |
+| `regexp`              | Match regular expression                      | `regexp: /^\d{5}$/`                                     |
+| `equal`               | Must equal specific value                     | `equal: 'yes'`                                          |
+| `oneof`               | Must be one of allowed values                 | `oneof: ['red', 'green', 'blue']`                       |
+| `array`               | Must be an array                              | `array: true`                                           |
+| `array_items`         | Array items must be in allowed list           | `array_items: ['option1', 'option2']`                   |
+| `shapeOf`             | Validate object structure                     | `shapeOf: { shape: {...}, required: [...] }`            |
+| `arrayOfShapes`       | Validate array of objects                     | `arrayOfShapes: { shape: {...}, validators: {...} }`    |
+| `at_least_one_of`     | At least one field from group must have value | `at_least_one_of: { fields: [...] }`                    |
 
 ---
 
 ## Rule Details
 
 ### required
+
 ```typescript
-{ username: { required: true } }
+{
+  username: {
+    required: true;
+  }
+}
 ```
+
 - Value must exist
 - Cannot be `undefined`, `null`, or empty string
 - For arrays: must have at least one item
@@ -57,6 +63,7 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
 ---
 
 ### required_depends_on
+
 ```typescript
 {
   shipping_address: {
@@ -64,57 +71,81 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
   }
 }
 ```
+
 - Field only required when condition is met
 - Checks if another field equals specific value
 
 ---
 
 ### minLength / maxLength
+
 ```typescript
 { username: { minLength: 3, maxLength: 20 } }
 ```
+
 - Validates string length
 - Works with `.toString()` conversion
 
 ---
 
 ### regexp
+
 ```typescript
-{ email: { regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ } }
+{
+  email: {
+    regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  }
+}
 ```
+
 - Pattern matching validation
 - Tests value against regex
 
 ---
 
 ### equal
+
 ```typescript
-{ terms: { equal: 'I agree' } }
+{
+  terms: {
+    equal: 'I agree';
+  }
+}
 ```
+
 - Value must exactly match
 - Strict equality check
 
 ---
 
 ### oneof
+
 ```typescript
-{ status: { oneof: ['draft', 'published', 'archived'] } }
+{
+  status: {
+    oneof: ['draft', 'published', 'archived'];
+  }
+}
 ```
+
 - Enum validation
 - Value must be in allowed list
 
 ---
 
 ### array
+
 ```typescript
 { tags: { array: true, required: true } }
 ```
+
 - Validates field is an array
 - With `required: true`, ensures at least one item
 
 ---
 
 ### array_items
+
 ```typescript
 {
   tags: {
@@ -123,12 +154,14 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
   }
 }
 ```
+
 - All array items must be in allowed list
 - Supports primitives and objects (deep comparison)
 
 ---
 
 ### shapeOf
+
 ```typescript
 {
   address: {
@@ -148,6 +181,7 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
 ```
 
 **Features:**
+
 - Type checking (`'string'`, `'number'`, `'boolean'`)
 - Enum validation (array of allowed values)
 - Required properties
@@ -156,6 +190,7 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
 ---
 
 ### arrayOfShapes
+
 ```typescript
 {
   items: {
@@ -176,6 +211,7 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
 ```
 
 **Features:**
+
 - Array-level validation (`_array`)
 - Per-property validation
 - Type checking for each object
@@ -184,6 +220,7 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
 ---
 
 ### at_least_one_of
+
 ```typescript
 {
   contact_email: {
@@ -205,12 +242,14 @@ const errors = validate({ email: 'test@example.com', age: '25' }, schema);
 ```
 
 **Features:**
+
 - Group validation (any field must have value)
 - Conditional requirement (`required_depends_on`)
 - Works with strings, numbers, booleans, arrays
 - Empty detection (`''`, `null`, `undefined`, `[]`)
 
 **With condition:**
+
 ```typescript
 {
   social_facebook: {
@@ -271,6 +310,7 @@ type ValidationError = {
 ## Common Patterns
 
 ### Basic Form Validation
+
 ```typescript
 const schema = {
   email: { required: true, regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
@@ -280,6 +320,7 @@ const schema = {
 ```
 
 ### Conditional Fields
+
 ```typescript
 const schema = {
   account_type: { required: true, oneof: ['personal', 'business'] },
@@ -291,6 +332,7 @@ const schema = {
 ```
 
 ### Nested Object
+
 ```typescript
 const schema = {
   user: {
@@ -311,6 +353,7 @@ const schema = {
 ```
 
 ### Array of Objects
+
 ```typescript
 const schema = {
   items: {
@@ -344,7 +387,7 @@ if (errors.length === 0) {
 }
 
 // Get errors for specific field
-const emailErrors = errors.filter(e => e.field === 'email');
+const emailErrors = errors.filter((e) => e.field === 'email');
 
 // Group errors by field
 const errorsByField = errors.reduce((acc, err) => {
@@ -362,7 +405,9 @@ const errorsByField = errors.reduce((acc, err) => {
 // Define reusable validator
 const isValidUUID = (value: unknown): boolean => {
   const uuid = value as string;
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(uuid);
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    uuid,
+  );
 };
 
 // Use in schema
@@ -451,12 +496,12 @@ const REGISTRATION_SCHEMA: ValidationDescription = {
 // Validate user registration data
 function registerUser(data: any) {
   const errors = validate(data, REGISTRATION_SCHEMA);
-  
+
   if (errors.length > 0) {
     console.error('Validation failed:', errors);
     return { success: false, errors };
   }
-  
+
   // Process registration
   return { success: true };
 }
@@ -467,4 +512,3 @@ function registerUser(data: any) {
 **Quick Start:** Copy a pattern above and customize for your needs!
 
 **Full Docs:** See [README.md](README.md) for complete documentation.
-

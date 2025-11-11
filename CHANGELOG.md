@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - `validate_at_least_one_of` - Group validation requiring at least one field to have a value
   - Validates that at least one field from a group has a meaningful value
   - Supports conditional requirements via `required_depends_on`
@@ -19,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-11-11
 
 ### Added
+
 - Initial release of @molinit/validator
 - Core validation methods:
   - `validate_required` - Required field validation
@@ -40,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for nested object validation
 
 ### Features
+
 - Declarative schema-based validation
 - Type-safe with full TypeScript support
 - Extensible with custom validation functions
@@ -47,4 +50,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Zero dependencies (dev dependencies only)
 
 [1.0.0]: https://github.com/molinit/validator/releases/tag/v1.0.0
-
